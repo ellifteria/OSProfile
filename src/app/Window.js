@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import Draggable from 'react-draggable';
 
-function Window({ zIndex, parentClickHandler, content }) {
-    const [visible, setVisibility] = useState(true);
+function Window({ windowTitle, initialZIndex, maxZIndex, maxZIndexStateHandler, visible, closeWindow, content }) {
+
+    const [zIndex, setZIndex] = useState(initialZIndex);
 
     function clickHandler() {
-        parentClickHandler();
-    }
-    
-    function closeWindow() {
-        setVisibility(false);
+        let newMaxZIndex = maxZIndex + 1;
+        setZIndex(newMaxZIndex);
+        maxZIndexStateHandler(newMaxZIndex)
     }
     
     return (
@@ -19,11 +18,13 @@ function Window({ zIndex, parentClickHandler, content }) {
         <button className="close-button" onClick={closeWindow}>X</button>
         <span className="window-title">
         <strong>
-        Drag here
+        {windowTitle}
         </strong>
         </span>
         </div>
+        <div className="window-content">
         {content}
+        </div>
         </div>
         </Draggable>
     );

@@ -1,53 +1,36 @@
 "use client";
 
 import React, { useState } from 'react';
-import Window from './Window';
+import AboutMe from './AboutMe';
+import Research from './Research'
+import DateTime from './DateTime';
 
 export default function App() {
-  const [maxZIndex, setMaxZIndex] = useState(3);
-  const [windowList, setWindowList] = useState([]);
-  
-  function addNewWindow(content) {
-    let newValue = maxZIndex + 1;
-    setMaxZIndex(newValue);
-    
-    let newArray = windowList.concat({
-      id: windowList.length,
-      zIndex: newValue,
-      content: content,
-    });
-    setWindowList(newArray);
-  }
-  
-  function removeLastWindow() {
-    let newArray = windowList.slice();
-    newArray.pop();
-    setWindowList(newArray);
-  }
-  
-  function parentClickHandler(id) {
-    let newValue = maxZIndex + 1;
-    setMaxZIndex(newValue);
-    
-    let newArray = windowList.map((item) =>
-      item.id === id ? { ...item, zIndex: newValue } : item
-  );
-  setWindowList(newArray);
-}
+  const [maxZIndex, setMaxZIndex] = useState(4);
+  const [aboutMeVisible, setAboutMeVisible] = useState(false);
+  const [researchVisible, setResearchVisible] = useState(false);
 
 return (
-  <div className="window-container">
-  <button onClick={() => {addNewWindow("hello,")}}>New Window</button>
-  <button onClick={() => {addNewWindow("world!")}}>New Window</button>
-  <button onClick={removeLastWindow}>Remove Window</button>
-  {windowList.map((item) => (
-    <Window
-    key={item.id}
-    zIndex={item.zIndex}
-    parentClickHandler={() => parentClickHandler(item.id)}
-    content={item.content}
-    />
-  ))}
+  <div className="os">
+  <div className="navbar-container"><div className="navbar-text"><DateTime/></div></div>
+  <div className="desktop-icons">
+  <button className="icon" onClick={() =>setAboutMeVisible(true)} style={{gridColumn: 1, gridRow: 1}}>About Me</button>
+  <button className="icon" onClick={() =>setResearchVisible(true)} style={{gridColumn: 1, gridRow: 2}}>Research</button>
+  <AboutMe
+  initialZIndex={3}
+  maxZIndex = {maxZIndex}
+  maxZIndexStateHandler = {setMaxZIndex}
+  visible = {aboutMeVisible}
+  closeWindow = {() => setAboutMeVisible(false)}
+  />
+  <Research
+  initialZIndex={4}
+  maxZIndex = {maxZIndex}
+  maxZIndexStateHandler = {setMaxZIndex}
+  visible = {researchVisible}
+  closeWindow = {() => setResearchVisible(false)}
+  />
+  </div>
   </div>
 );
 }
